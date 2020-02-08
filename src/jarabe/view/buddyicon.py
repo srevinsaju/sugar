@@ -26,7 +26,6 @@ from jarabe.view.buddymenu import BuddyMenu
 from jarabe.util.normalize import normalize_string
 
 import os
-import statvfs
 
 _FILTERED_ALPHA = 0.33
 
@@ -127,10 +126,10 @@ class BuddyIcon(CanvasIcon):
         self.journal_entries = entries
 
     def _get_space(self):
-        stat = os.statvfs(env.get_profile_path())
-        free_space = stat[statvfs.F_BSIZE] * stat[statvfs.F_BAVAIL]
-        total_space = stat[statvfs.F_BSIZE] * stat[statvfs.F_BLOCKS]
 
+        stat = os.statvfs(env.get_profile_path())
+        free_space = stat.f_bsize * stat.f_bavail
+        total_space = stat.f_bsize * stat.f_blocks
         free_space = self._get_MBs(free_space)
         total_space = self._get_MBs(total_space)
         used_space = total_space - free_space
